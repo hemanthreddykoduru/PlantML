@@ -1,0 +1,8 @@
+# Environments
+venv/
+__pycache__/
+.DS_Store
+
+# Data and Models
+dataset/
+model/
