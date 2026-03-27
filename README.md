@@ -37,9 +37,10 @@ PlantML/
 
 ## ⚡ Quick Start
 
-### 1. Clone / Navigate to the Project
+### 1. Clone the Project
 
 ```bash
+git clone https://github.com/hemanthreddykoduru/PlantML.git
 cd PlantML
 ```
 
@@ -59,7 +60,8 @@ pip install -r requirements.txt
 
 ---
 
-## 📥 Dataset Setup
+## 📥 Dataset Setup (Optional)
+> **Note:** The complete high-quality dataset is already included in the repository's `dataset/` folder. You can skip this section unless you are rebuilding it from scratch.
 
 ### Option A — Sample Dataset (Quick Demo, ~2 minutes)
 
@@ -87,7 +89,8 @@ Then rename/reorganise folders to match the 10 class names in `utils.py`:
 
 ---
 
-## 🏋️ Model Training
+## 🏋️ Model Training (Optional)
+> **Note:** A highly accurate (96%), pre-trained AI model is already included in the `model/` folder. You only need to run this if you want to modify and retrain the AI yourself!
 
 ```bash
 python train.py
