@@ -344,7 +344,7 @@ with col_results:
         with st.spinner("🔬 Analysing plant image..."):
             time.sleep(0.4)   # Brief delay for UX feel
             try:
-                class_name, confidence = predict_plant(model, image)
+                class_name, confidence = predict_plant(model, image, class_names)
                 info = get_plant_info(class_name)
                 st.session_state["last_result"] = (class_name, confidence, info)
             except Exception as exc:

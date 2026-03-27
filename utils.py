@@ -394,23 +394,27 @@ def get_plant_info(class_name: str) -> dict:
     )
 
 
-def predict_plant(model, image: Image.Image):
+def predict_plant(model, image: Image.Image, class_names: list = None):
     """
     Run inference on a PIL Image and return the top predicted class and confidence.
 
     Args:
-        model:  Loaded Keras model.
-        image:  PIL.Image object to classify.
+        model:       Loaded Keras model.
+        image:       PIL.Image object to classify.
+        class_names: List of class names (ordered). Falls back to CLASS_NAMES if None.
 
     Returns:
         Tuple (class_name: str, confidence: float)
         e.g. ("Neem", 0.9432)
     """
+    if class_names is None:
+        class_names = CLASS_NAMES
+
     processed = preprocess_image(image)
     predictions = model.predict(processed, verbose=0)  # shape (1, num_classes)
     predicted_idx = int(np.argmax(predictions[0]))
     confidence = float(predictions[0][predicted_idx])
-    class_name = CLASS_NAMES[predicted_idx]
+    class_name = class_names[predicted_idx]
     return class_name, confidence
 
 
