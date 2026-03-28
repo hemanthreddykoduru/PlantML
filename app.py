@@ -174,7 +174,12 @@ from utils import (
     preprocess_image,
     predict_plant,
     get_plant_info,
+    load_experiments,
+    save_experiment
 )
+
+import pandas as pd
+import plotly.express as px
 
 MODEL_PATH   = os.path.join("model", "plant_model.h5")
 CLASSES_PATH = os.path.join("model", "class_names.json")
@@ -224,6 +229,11 @@ def confidence_bar_html(confidence: float) -> str:
 with st.sidebar:
     st.markdown("## 🌿 Plant Identifier")
     st.markdown("---")
+    
+    # ── Navigation Selection ──
+    page = st.radio("📌 Navigation", ["🌿 Identify Plant", "📝 Log Experiment", "📊 Validation Dashboard"])
+    
+    st.markdown("---")
     st.markdown("### 📋 Supported Plants")
     for cls in CLASS_NAMES:
         info = get_plant_info(cls)
@@ -235,14 +245,87 @@ with st.sidebar:
     st.markdown("- **Transfer Learning**: ImageNet")
     st.markdown("- **Framework**: TensorFlow / Keras")
     st.markdown("---")
+    st.markdown("---")
     st.markdown(
-        "<small style='color:#484f58;'>Built for Academic Internship Demo<br>© 2025 PlantML Project</small>",
+        "<small style='color:#484f58;'>Built for Academic Internship Demo<br>© 2026 PlantML Project</small>",
         unsafe_allow_html=True,
     )
 
+# (Navigation moved to top of sidebar)
 
 # ──────────────────────────────────────────────────────────────────────────────
-# HERO HEADER
+# PAGE 2: LOG EXPERIMENT
+# ──────────────────────────────────────────────────────────────────────────────
+if page == "📝 Log Experiment":
+    st.markdown("## 📝 Log Vrikshayurveda Experiment")
+    st.write("Record real-world applications of traditional agricultural practices for experimental validation.")
+    
+    with st.form("experiment_form"):
+        col1, col2 = st.columns(2)
+        plant_name = col1.selectbox("Target Plant", CLASS_NAMES)
+        soil_type = col2.selectbox("Soil Type", ["Clay", "Sandy", "Loam", "Sandy Loam", "Silt", "Peat"])
+        
+        treatment = st.text_input("Vrikshayurveda Treatment Applied", placeholder="e.g. Neem leaf slurry for pest control")
+        duration = st.number_input("Observation Duration (Days)", min_value=1, max_value=365, value=14)
+        outcome = st.selectbox("Experimental Outcome", ["Success", "Partial Success", "Failure", "Ongoing"])
+        notes = st.text_area("Observation Notes")
+        
+        submitted = st.form_submit_button("📁 Submit Verification Log", type="primary")
+        
+        if submitted:
+            if treatment:
+                save_experiment(plant_name, soil_type, treatment, duration, outcome, notes)
+                st.success("✅ Experiment tracked successfully! It has been added to the Validation Dashboard.")
+            else:
+                st.error("⚠️ Please specify the treatment applied.")
+                
+    st.stop()
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PAGE 3: VALIDATION DASHBOARD
+# ──────────────────────────────────────────────────────────────────────────────
+elif page == "📊 Validation Dashboard":
+    st.markdown("## 📊 Experimental Validation Dashboard")
+    st.write("Statistical analysis of all crowdsourced Vrikshayurveda experimental validations.")
+    
+    experiments = load_experiments()
+    if not experiments:
+        st.info("No experiments logged yet. Go to 'Log Experiment' to add data.")
+        st.stop()
+        
+    df = pd.DataFrame(experiments)
+    
+    # KPIs
+    kpi1, kpi2, kpi3 = st.columns(3)
+    kpi1.metric("Total Validations Logged", len(df))
+    success_rate = (len(df[df['outcome'] == 'Success']) / len(df)) * 100
+    kpi2.metric("Overall Success Efficacy", f"{success_rate:.1f}%")
+    kpi3.metric("Avg. Observation Duration", f"{df['duration_days'].mean():.1f} days")
+    
+    st.markdown("---")
+    
+    colA, colB = st.columns(2)
+    with colA:
+        # Pie chart of outcomes
+        fig1 = px.pie(df, names='outcome', title='Experimental Outcomes', 
+                     color='outcome', color_discrete_map={'Success':'#27a85a', 'Partial Success':'#f0a500', 'Failure':'#e05252', 'Ongoing':'#58a6ff'})
+        fig1.update_layout(plot_bgcolor='#0d1117', paper_bgcolor='#0d1117', font_color='#e6edf3')
+        st.plotly_chart(fig1, use_container_width=True)
+        
+    with colB:
+        # Bar chart of treatments per plant
+        fig2 = px.histogram(df, x='plant_name', color='outcome', title='Validations by Plant Target', barmode='group',
+                           color_discrete_map={'Success':'#27a85a', 'Partial Success':'#f0a500', 'Failure':'#e05252'})
+        fig2.update_layout(plot_bgcolor='#0d1117', paper_bgcolor='#0d1117', font_color='#e6edf3')
+        st.plotly_chart(fig2, use_container_width=True)
+        
+    st.markdown('<div class="section-heading">Raw Validation Logs</div>', unsafe_allow_html=True)
+    st.dataframe(df[['timestamp', 'plant_name', 'treatment', 'outcome', 'duration_days', 'notes']], use_container_width=True)
+    
+    st.stop()
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PAGE 1: IDENTIFY PLANT (Existing code flows naturally here)
 # ──────────────────────────────────────────────────────────────────────────────
 
 st.markdown(

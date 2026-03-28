@@ -428,3 +428,37 @@ def export_plant_info_json(filepath: str = "plant_database.json") -> None:
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(PLANT_INFO, f, indent=4, ensure_ascii=False)
     print(f"Plant database exported to: {filepath}")
+
+import uuid
+from datetime import datetime
+
+# Path to the experimental data storage
+EXPERIMENTS_FILE = "experiments.json"
+
+def load_experiments() -> list:
+    """Read all logged experiments from the local JSON database."""
+    import os
+    if not os.path.exists(EXPERIMENTS_FILE):
+        return []
+    try:
+        with open(EXPERIMENTS_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+def save_experiment(plant_name: str, soil_type: str, treatment: str, duration_days: int, outcome: str, notes: str) -> None:
+    """Append a new experiment log to the database."""
+    experiments = load_experiments()
+    new_entry = {
+        "id": str(uuid.uuid4())[:8],
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "plant_name": plant_name,
+        "soil_type": soil_type,
+        "treatment": treatment,
+        "duration_days": duration_days,
+        "outcome": outcome,
+        "notes": notes,
+    }
+    experiments.append(new_entry)
+    with open(EXPERIMENTS_FILE, "w", encoding="utf-8") as f:
+        json.dump(experiments, f, indent=4, ensure_ascii=False)
