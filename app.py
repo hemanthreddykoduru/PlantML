@@ -394,7 +394,8 @@ elif page == "💬 Ask Vrikshayurveda AI":
                 # Fetch intelligence from OpenRouter
                 completion = client.chat.completions.create(
                     model="google/gemini-2.5-flash",
-                    messages=chat_history
+                    messages=chat_history,
+                    max_tokens=1500
                 )
                 answer = completion.choices[0].message.content
                 st.markdown(answer)
