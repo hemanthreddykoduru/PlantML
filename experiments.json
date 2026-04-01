@@ -1,90 +1,101 @@
 [
-  {
-    "id": "1",
-    "timestamp": "2023-01-15T10:00:00Z",
-    "plant_name": "Neem",
-    "soil_type": "Clay",
-    "treatment": "Neem cake organic fertilizer",
-    "duration_days": 30,
-    "outcome": "Success",
-    "nlp_score": 0.582,
-    "notes": "Fantastic results! A significant reduction in root knot nematodes was observed, and the crop's leaves look extremely vibrant and healthy."
-  },
-  {
-    "id": "2",
-    "timestamp": "2023-02-10T14:30:00Z",
-    "plant_name": "Tulsi",
-    "soil_type": "Loam",
-    "treatment": "Planted near grain store",
-    "duration_days": 15,
-    "outcome": "Success",
-    "nlp_score": 0.440,
-    "notes": "Noticeable and great decrease in gnats and mosquitoes around the grain storage area."
-  },
-  {
-    "id": "3",
-    "timestamp": "2023-03-05T09:15:00Z",
-    "plant_name": "Banana",
-    "soil_type": "Sandy",
-    "treatment": "Banana peel potassium mulch",
-    "duration_days": 45,
-    "outcome": "Partial Success",
-    "nlp_score": 0.220,
-    "notes": "Slightly improved leaf coloration on the edges, but the soil ultimately required additional nitrogen supplements to avoid wilt."
-  },
-  {
-    "id": "4",
-    "timestamp": "2023-04-20T11:45:00Z",
-    "plant_name": "Aloe_Vera",
-    "soil_type": "Sandy Loam",
-    "treatment": "Root hormone stimulation via Aloe paste",
-    "duration_days": 14,
-    "outcome": "Success",
-    "nlp_score": 0.765,
-    "notes": "Excellent performance! The treated cuttings showed 80% faster root emergency compared to the non-treated negative control group."
-  },
-  {
-    "id": "5",
-    "timestamp": "2023-05-12T16:20:00Z",
-    "plant_name": "Turmeric",
-    "soil_type": "Loam",
-    "treatment": "Turmeric powder bio-fungicide spray",
-    "duration_days": 7,
-    "outcome": "Success",
-    "nlp_score": 0.612,
-    "notes": "Fast and effective clearance of powdery mildew on experimental tomato vines without any chemical burns."
-  },
-  {
-    "id": "6",
-    "timestamp": "2023-06-08T08:00:00Z",
-    "plant_name": "Mango",
-    "soil_type": "Clay",
-    "treatment": "Vrikshayurveda leaf infusion for pests",
-    "duration_days": 21,
-    "outcome": "Failure",
-    "nlp_score": -0.654,
-    "notes": "Dismal outcome. Very disappointing. The spray was completely unable to deter mango hoppers effectively during peak season, leading to terrible crop damage."
-  },
-  {
-    "id": "7",
-    "timestamp": "2023-07-22T13:10:00Z",
-    "plant_name": "Rose",
-    "soil_type": "Loam",
-    "treatment": "Companion planting for pollination",
-    "duration_days": 60,
-    "outcome": "Success",
-    "nlp_score": 0.318,
-    "notes": "A beautiful 30% increase in local bee traffic visually recorded by the research team throughout the blooming window."
-  },
-  {
-    "id": "8",
-    "timestamp": "2023-08-14T10:45:00Z",
-    "plant_name": "Neem",
-    "soil_type": "Sandy",
-    "treatment": "Neem oil biopesticide spray",
-    "duration_days": 10,
-    "outcome": "Success",
-    "nlp_score": 0.528,
-    "notes": "Perfect treatment. Complete suppression of the aphid population within exactly 3 days. Extremely effective."
-  }
+    {
+        "id": "1",
+        "timestamp": "2023-01-15T10:00:00Z",
+        "plant_name": "Neem",
+        "soil_type": "Clay",
+        "treatment": "Neem cake organic fertilizer",
+        "duration_days": 30,
+        "outcome": "Success",
+        "nlp_score": 0.582,
+        "notes": "Fantastic results! A significant reduction in root knot nematodes was observed, and the crop's leaves look extremely vibrant and healthy."
+    },
+    {
+        "id": "2",
+        "timestamp": "2023-02-10T14:30:00Z",
+        "plant_name": "Tulsi",
+        "soil_type": "Loam",
+        "treatment": "Planted near grain store",
+        "duration_days": 15,
+        "outcome": "Success",
+        "nlp_score": 0.44,
+        "notes": "Noticeable and great decrease in gnats and mosquitoes around the grain storage area."
+    },
+    {
+        "id": "3",
+        "timestamp": "2023-03-05T09:15:00Z",
+        "plant_name": "Banana",
+        "soil_type": "Sandy",
+        "treatment": "Banana peel potassium mulch",
+        "duration_days": 45,
+        "outcome": "Partial Success",
+        "nlp_score": 0.22,
+        "notes": "Slightly improved leaf coloration on the edges, but the soil ultimately required additional nitrogen supplements to avoid wilt."
+    },
+    {
+        "id": "4",
+        "timestamp": "2023-04-20T11:45:00Z",
+        "plant_name": "Aloe_Vera",
+        "soil_type": "Sandy Loam",
+        "treatment": "Root hormone stimulation via Aloe paste",
+        "duration_days": 14,
+        "outcome": "Success",
+        "nlp_score": 0.765,
+        "notes": "Excellent performance! The treated cuttings showed 80% faster root emergency compared to the non-treated negative control group."
+    },
+    {
+        "id": "5",
+        "timestamp": "2023-05-12T16:20:00Z",
+        "plant_name": "Turmeric",
+        "soil_type": "Loam",
+        "treatment": "Turmeric powder bio-fungicide spray",
+        "duration_days": 7,
+        "outcome": "Success",
+        "nlp_score": 0.612,
+        "notes": "Fast and effective clearance of powdery mildew on experimental tomato vines without any chemical burns."
+    },
+    {
+        "id": "6",
+        "timestamp": "2023-06-08T08:00:00Z",
+        "plant_name": "Mango",
+        "soil_type": "Clay",
+        "treatment": "Vrikshayurveda leaf infusion for pests",
+        "duration_days": 21,
+        "outcome": "Failure",
+        "nlp_score": -0.654,
+        "notes": "Dismal outcome. Very disappointing. The spray was completely unable to deter mango hoppers effectively during peak season, leading to terrible crop damage."
+    },
+    {
+        "id": "7",
+        "timestamp": "2023-07-22T13:10:00Z",
+        "plant_name": "Rose",
+        "soil_type": "Loam",
+        "treatment": "Companion planting for pollination",
+        "duration_days": 60,
+        "outcome": "Success",
+        "nlp_score": 0.318,
+        "notes": "A beautiful 30% increase in local bee traffic visually recorded by the research team throughout the blooming window."
+    },
+    {
+        "id": "8",
+        "timestamp": "2023-08-14T10:45:00Z",
+        "plant_name": "Neem",
+        "soil_type": "Sandy",
+        "treatment": "Neem oil biopesticide spray",
+        "duration_days": 10,
+        "outcome": "Success",
+        "nlp_score": 0.528,
+        "notes": "Perfect treatment. Complete suppression of the aphid population within exactly 3 days. Extremely effective."
+    },
+    {
+        "id": "fe1989b4",
+        "timestamp": "2026-04-01T13:56:04.178609Z",
+        "plant_name": "Mango",
+        "soil_type": "Clay",
+        "treatment": "Mango bark extract",
+        "duration_days": 14,
+        "outcome": "Success",
+        "notes": "The Vrikshayurvedic mango treatment was extremely effective and completely wiped out all the pests",
+        "nlp_score": 0.5256
+    }
 ]

@@ -232,7 +232,7 @@ with st.sidebar:
     st.markdown("---")
     
     # ── Navigation Selection ──
-    page = st.radio("📌 Navigation", ["🌿 Identify Plant", "📝 Log Experiment", "📊 Validation Dashboard"])
+    page = st.radio("📌 Navigation", ["🌿 Identify Plant", "📝 Log Experiment", "📊 Validation Dashboard", "💬 Ask Vrikshayurveda AI"])
     
     st.markdown("---")
     st.markdown("### 📋 Supported Plants")
@@ -330,6 +330,67 @@ elif page == "📊 Validation Dashboard":
     
     st.dataframe(display_df, use_container_width=True)
     
+    st.stop()
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PAGE 4: VRIKSHAYURVEDA AI COPILOT
+# ──────────────────────────────────────────────────────────────────────────────
+elif page == "💬 Ask Vrikshayurveda AI":
+    st.markdown("## 💬 Vrikshayurveda AI Copilot")
+    st.write("Ask our supercharged AI anything about agricultural practices, traditional texts, or biological crop treatments using its vast internet knowledge!")
+    
+    # ── API Key Management ──
+    api_key = None
+    if "GEMINI_API_KEY" in st.secrets:
+        api_key = st.secrets["GEMINI_API_KEY"]
+    else:
+        api_key = st.session_state.get("gemini_key", "")
+        if not api_key:
+            st.warning("⚠️ Internet Knowledge connection requires a free Google Gemini API Key.")
+            key_input = st.text_input("Enter your Gemini API Key securely:", type="password")
+            st.markdown("[Get a free API key here in 30 seconds!](https://aistudio.google.com/app/apikey)")
+            if st.button("Connect to Internet Knowledge", type="primary"):
+                if key_input:
+                    st.session_state["gemini_key"] = key_input
+                    st.rerun()
+                else:
+                    st.error("Please enter a valid key.")
+            st.stop()
+            
+    # ── AI Chat Interface ──
+    try:
+        import google.generativeai as genai
+        genai.configure(api_key=api_key)
+    except ImportError:
+        st.error("google-generativeai module is missing. Please restart Streamlit.")
+        st.stop()
+    
+    if "messages" not in st.session_state:
+        st.session_state.messages = [
+            {"role": "assistant", "content": "Namaste! I am your Vrikshayurveda AI Copilot embedded with vast internet knowledge. What agricultural or medicinal questions can I answer for you today?"}
+        ]
+        
+    for msg in st.session_state.messages:
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
+            
+    prompt = st.chat_input("Ask about crops, soils, or ancient texts...")
+    if prompt:
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+            
+        with st.chat_message("assistant"):
+            try:
+                model = genai.GenerativeModel('gemini-1.5-flash')
+                sys_prompt = "You are a master of Vrikshayurveda, modern agriculture, and internet knowledge. Answer intelligently."
+                response = model.generate_content(sys_prompt + " User Question: " + prompt)
+                answer = response.text
+                st.markdown(answer)
+                st.session_state.messages.append({"role": "assistant", "content": answer})
+            except Exception as e:
+                st.error(f"❌ AI Connection Error. Did you enter the correct API key? Details: {e}")
+                
     st.stop()
 
 # ──────────────────────────────────────────────────────────────────────────────
