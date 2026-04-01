@@ -326,7 +326,7 @@ elif page == "📊 Validation Dashboard":
     
     # Format the timestamp to be human readable
     display_df = df[['timestamp', 'plant_name', 'treatment', 'outcome', 'nlp_score', 'notes']].copy()
-    display_df['timestamp'] = pd.to_datetime(display_df['timestamp']).dt.strftime('%d %b %Y, %H:%M')
+    display_df['timestamp'] = pd.to_datetime(display_df['timestamp'], format='ISO8601').dt.strftime('%d %b %Y, %H:%M')
     
     st.dataframe(display_df, use_container_width=True)
     
