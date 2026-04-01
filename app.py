@@ -341,17 +341,17 @@ elif page == "💬 Ask Vrikshayurveda AI":
     
     # ── API Key Management ──
     api_key = None
-    if "GEMINI_API_KEY" in st.secrets:
-        api_key = st.secrets["GEMINI_API_KEY"]
+    if "OPENROUTER_API_KEY" in st.secrets:
+        api_key = st.secrets["OPENROUTER_API_KEY"]
     else:
-        api_key = st.session_state.get("gemini_key", "")
+        api_key = st.session_state.get("open_router_key", "")
         if not api_key:
-            st.warning("⚠️ Internet Knowledge connection requires a free Google Gemini API Key.")
-            key_input = st.text_input("Enter your Gemini API Key securely:", type="password")
-            st.markdown("[Get a free API key here in 30 seconds!](https://aistudio.google.com/app/apikey)")
+            st.warning("⚠️ Internet Knowledge connection requires an OpenRouter API Key.")
+            key_input = st.text_input("Enter your API Key securely:", type="password")
+            st.markdown("[Get a free OpenRouter connection key here](https://openrouter.ai/keys)")
             if st.button("Connect to Internet Knowledge", type="primary"):
                 if key_input:
-                    st.session_state["gemini_key"] = key_input
+                    st.session_state["open_router_key"] = key_input
                     st.rerun()
                 else:
                     st.error("Please enter a valid key.")
@@ -359,10 +359,13 @@ elif page == "💬 Ask Vrikshayurveda AI":
             
     # ── AI Chat Interface ──
     try:
-        import google.generativeai as genai
-        genai.configure(api_key=api_key)
+        from openai import OpenAI
+        client = OpenAI(
+            base_url="https://openrouter.ai/api/v1",
+            api_key=api_key
+        )
     except ImportError:
-        st.error("google-generativeai module is missing. Please restart Streamlit.")
+        st.error("openai module is missing. Please restart Streamlit.")
         st.stop()
     
     if "messages" not in st.session_state:
@@ -382,14 +385,22 @@ elif page == "💬 Ask Vrikshayurveda AI":
             
         with st.chat_message("assistant"):
             try:
-                model = genai.GenerativeModel('gemini-1.5-flash')
-                sys_prompt = "You are a master of Vrikshayurveda, modern agriculture, and internet knowledge. Answer intelligently."
-                response = model.generate_content(sys_prompt + " User Question: " + prompt)
-                answer = response.text
+                # Build chat history for memory
+                chat_history = [{"role": "system", "content": "You are a master of Vrikshayurveda, modern agriculture, and internet knowledge. Provide short, brilliant answers."}]
+                for m in st.session_state.messages:
+                    chat_history.append({"role": m["role"], "content": m["content"]})
+                chat_history.append({"role": "user", "content": prompt})
+                
+                # Fetch intelligence from OpenRouter
+                completion = client.chat.completions.create(
+                    model="google/gemini-2.5-flash",
+                    messages=chat_history
+                )
+                answer = completion.choices[0].message.content
                 st.markdown(answer)
                 st.session_state.messages.append({"role": "assistant", "content": answer})
             except Exception as e:
-                st.error(f"❌ AI Connection Error. Did you enter the correct API key? Details: {e}")
+                st.error(f"❌ AI Connection Error. Did you enter the correct OpenRouter API key? Details: {e}")
                 
     st.stop()
 
