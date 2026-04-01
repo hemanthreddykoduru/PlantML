@@ -269,16 +269,26 @@ if page == "📝 Log Experiment":
         treatment = st.text_input("Vrikshayurveda Treatment Applied", placeholder="e.g. Neem leaf slurry for pest control")
         duration = st.number_input("Observation Duration (Days)", min_value=1, max_value=365, value=14)
         
-        st.info("🤖 **NLP Verification**: The final outcome (Success/Failure) will be automatically computed by our Natural Language Processing engine using your observational evidence below.")
+        st.info("🤖 **AI LLM Verification**: The final outcome will be audited and computationally concluded by the intelligent OpenRouter AI Engine by reading your descriptive notes.")
         notes = st.text_area("Detailed Observational Evidence (Proof of Efficacy)", placeholder="e.g. The neem cake completely eliminated the nematodes resulting in vibrantly green, healthy foliage.")
         
-        submitted = st.form_submit_button("📁 Submit Textual Evidence for NLP Analysis", type="primary")
+        submitted = st.form_submit_button("✅ Audit & Submit Evidence via AI", type="primary")
         
         if submitted:
             if treatment and notes:
-                nlp_res = analyze_nlp_proof(notes)
+                # Capture API key securely from local state
+                api_key = st.secrets.get("OPENROUTER_API_KEY", st.session_state.get("open_router_key", None))
+                
+                with st.spinner("🤖 AI Agent is auditing your text using scientific LLM comprehension..."):
+                    nlp_res = analyze_nlp_proof(notes, api_key)
+                    
                 save_experiment(plant_name, soil_type, treatment, duration, nlp_res['outcome'], notes, nlp_res['score'])
-                st.success(f"✅ NLP Processed! Linguistic Efficacy: **{nlp_res['positivity']:.1f}% Positive Indicators**. Computed Outcome: **{nlp_res['outcome']}**.")
+                
+                if nlp_res.get("ai_verified"):
+                    st.success(f"**🤖 Verified by AI Copilot!** The LLM confidently classified this treatment as a **{nlp_res['outcome']}**.")
+                    st.info(f"**💡 AI Audit Reasoning:** {nlp_res['reasoning']}")
+                else:
+                    st.warning(f"⚡ Offline Math Fallback Mode Used! Computed Outcome: **{nlp_res['outcome']}** ({nlp_res['positivity']:.1f}% positive metric).")
             else:
                 st.error("⚠️ Please specify the treatment and provide textual evidence.")
                 

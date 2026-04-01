@@ -435,26 +435,67 @@ from datetime import datetime
 # Path to the experimental data storage
 EXPERIMENTS_FILE = "experiments.json"
 
-def analyze_nlp_proof(notes: str) -> dict:
-    """Use VADER Sentiment to extract mathematical proof of crop success from qualitative text."""
+def analyze_nlp_proof(notes: str, api_key: str = None) -> dict:
+    """Use AI to extract explicitly logical proof of crop success from textual notes."""
+    import json
+    
+    # Baseline Offline VADER Sentiment Math
     from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
     analyzer = SentimentIntensityAnalyzer()
     scores = analyzer.polarity_scores(notes)
     compound = scores['compound']
     
     if compound >= 0.35:
-        outcome = "Success"
+        base_outcome = "Success"
     elif compound > -0.05:
-        outcome = "Partial Success"
+        base_outcome = "Partial Success"
     else:
-        outcome = "Failure"
+        base_outcome = "Failure"
         
-    return {
+    vader_res = {
         "score": compound,
         "positivity": scores['pos'] * 100,
         "negativity": scores['neg'] * 100,
-        "outcome": outcome
+        "outcome": base_outcome,
+        "ai_verified": False,
+        "reasoning": "Standard mathematical sentiment validation."
     }
+
+    # True LLM Agent Verification (if API key is available)
+    if api_key:
+        try:
+            from openai import OpenAI
+            client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=api_key)
+            prompt = f"Analyze the following Vrikshayurveda crop observation. Did the treatment succeed? \nObservation: '{notes}'\nRespond STRICTLY in pure JSON format (do not use markdown backticks) with exactly three keys: 'outcome' (must be exactly 'Success', 'Partial Success', or 'Failure'), 'score' (a float between -1.0 and 1.0 representing efficacy), and 'reasoning' (a short 1-sentence scientific explanation of why you made this deduction based on the text)."
+            
+            completion = client.chat.completions.create(
+                model="google/gemini-2.5-flash",
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=600
+            )
+            raw_content = completion.choices[0].message.content.strip()
+            # Clean possible markdown block wrapper
+            if raw_content.startswith("`"):
+                import re
+                json_match = re.search(r'\{.*\}', raw_content, re.DOTALL)
+                if json_match:
+                    raw_content = json_match.group()
+                    
+            ai_data = json.loads(raw_content)
+            
+            return {
+                "score": float(ai_data.get("score", compound)),
+                "positivity": scores['pos'] * 100,
+                "negativity": scores['neg'] * 100,
+                "outcome": ai_data.get("outcome", base_outcome),
+                "ai_verified": True,
+                "reasoning": ai_data.get("reasoning", "Verified logically by LLM interpretation.")
+            }
+        except Exception as e:
+            # Fallback seamlessly to offline VADER mathematics!
+            pass
+            
+    return vader_res
 
 def load_experiments() -> list:
     """Read all logged experiments from the local JSON database."""
