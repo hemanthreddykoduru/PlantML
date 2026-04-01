@@ -7,7 +7,8 @@
     "treatment": "Neem cake organic fertilizer",
     "duration_days": 30,
     "outcome": "Success",
-    "notes": "Significant reduction in root knot nematodes observed."
+    "nlp_score": 0.582,
+    "notes": "Fantastic results! A significant reduction in root knot nematodes was observed, and the crop's leaves look extremely vibrant and healthy."
   },
   {
     "id": "2",
@@ -17,7 +18,8 @@
     "treatment": "Planted near grain store",
     "duration_days": 15,
     "outcome": "Success",
-    "notes": "Noticeable decrease in gnats and mosquitoes around storage area."
+    "nlp_score": 0.440,
+    "notes": "Noticeable and great decrease in gnats and mosquitoes around the grain storage area."
   },
   {
     "id": "3",
@@ -27,7 +29,8 @@
     "treatment": "Banana peel potassium mulch",
     "duration_days": 45,
     "outcome": "Partial Success",
-    "notes": "Improved leaf coloration, but soil required additional nitrogen."
+    "nlp_score": 0.220,
+    "notes": "Slightly improved leaf coloration on the edges, but the soil ultimately required additional nitrogen supplements to avoid wilt."
   },
   {
     "id": "4",
@@ -37,7 +40,8 @@
     "treatment": "Root hormone stimulation via Aloe paste",
     "duration_days": 14,
     "outcome": "Success",
-    "notes": "Cuttings showed 80% faster root emergency compared to control."
+    "nlp_score": 0.765,
+    "notes": "Excellent performance! The treated cuttings showed 80% faster root emergency compared to the non-treated negative control group."
   },
   {
     "id": "5",
@@ -47,7 +51,8 @@
     "treatment": "Turmeric powder bio-fungicide spray",
     "duration_days": 7,
     "outcome": "Success",
-    "notes": "Effective clearance of powdery mildew on experimental tomato vines."
+    "nlp_score": 0.612,
+    "notes": "Fast and effective clearance of powdery mildew on experimental tomato vines without any chemical burns."
   },
   {
     "id": "6",
@@ -57,7 +62,8 @@
     "treatment": "Vrikshayurveda leaf infusion for pests",
     "duration_days": 21,
     "outcome": "Failure",
-    "notes": "Unable to deter mango hoppers effectively during peak season."
+    "nlp_score": -0.654,
+    "notes": "Dismal outcome. Very disappointing. The spray was completely unable to deter mango hoppers effectively during peak season, leading to terrible crop damage."
   },
   {
     "id": "7",
@@ -67,7 +73,8 @@
     "treatment": "Companion planting for pollination",
     "duration_days": 60,
     "outcome": "Success",
-    "notes": "30% increase in local bee traffic visually recorded."
+    "nlp_score": 0.318,
+    "notes": "A beautiful 30% increase in local bee traffic visually recorded by the research team throughout the blooming window."
   },
   {
     "id": "8",
@@ -77,6 +84,7 @@
     "treatment": "Neem oil biopesticide spray",
     "duration_days": 10,
     "outcome": "Success",
-    "notes": "Complete suppression of aphid population within 3 days."
+    "nlp_score": 0.528,
+    "notes": "Perfect treatment. Complete suppression of the aphid population within exactly 3 days. Extremely effective."
   }
 ]

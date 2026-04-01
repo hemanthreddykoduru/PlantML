@@ -175,7 +175,8 @@ from utils import (
     predict_plant,
     get_plant_info,
     load_experiments,
-    save_experiment
+    save_experiment,
+    analyze_nlp_proof
 )
 
 import pandas as pd
@@ -267,17 +268,19 @@ if page == "📝 Log Experiment":
         
         treatment = st.text_input("Vrikshayurveda Treatment Applied", placeholder="e.g. Neem leaf slurry for pest control")
         duration = st.number_input("Observation Duration (Days)", min_value=1, max_value=365, value=14)
-        outcome = st.selectbox("Experimental Outcome", ["Success", "Partial Success", "Failure", "Ongoing"])
-        notes = st.text_area("Observation Notes")
         
-        submitted = st.form_submit_button("📁 Submit Verification Log", type="primary")
+        st.info("🤖 **NLP Verification**: The final outcome (Success/Failure) will be automatically computed by our Natural Language Processing engine using your observational evidence below.")
+        notes = st.text_area("Detailed Observational Evidence (Proof of Efficacy)", placeholder="e.g. The neem cake completely eliminated the nematodes resulting in vibrantly green, healthy foliage.")
+        
+        submitted = st.form_submit_button("📁 Submit Textual Evidence for NLP Analysis", type="primary")
         
         if submitted:
-            if treatment:
-                save_experiment(plant_name, soil_type, treatment, duration, outcome, notes)
-                st.success("✅ Experiment tracked successfully! It has been added to the Validation Dashboard.")
+            if treatment and notes:
+                nlp_res = analyze_nlp_proof(notes)
+                save_experiment(plant_name, soil_type, treatment, duration, nlp_res['outcome'], notes, nlp_res['score'])
+                st.success(f"✅ NLP Processed! Linguistic Efficacy: **{nlp_res['positivity']:.1f}% Positive Indicators**. Computed Outcome: **{nlp_res['outcome']}**.")
             else:
-                st.error("⚠️ Please specify the treatment applied.")
+                st.error("⚠️ Please specify the treatment and provide textual evidence.")
                 
     st.stop()
 
@@ -319,8 +322,13 @@ elif page == "📊 Validation Dashboard":
         fig2.update_layout(plot_bgcolor='#0d1117', paper_bgcolor='#0d1117', font_color='#e6edf3')
         st.plotly_chart(fig2, use_container_width=True)
         
-    st.markdown('<div class="section-heading">Raw Validation Logs</div>', unsafe_allow_html=True)
-    st.dataframe(df[['timestamp', 'plant_name', 'treatment', 'outcome', 'duration_days', 'notes']], use_container_width=True)
+    st.markdown('<div class="section-heading">NLP-Validated Raw Logs</div>', unsafe_allow_html=True)
+    
+    # Format the timestamp to be human readable
+    display_df = df[['timestamp', 'plant_name', 'treatment', 'outcome', 'nlp_score', 'notes']].copy()
+    display_df['timestamp'] = pd.to_datetime(display_df['timestamp']).dt.strftime('%d %b %Y, %H:%M')
+    
+    st.dataframe(display_df, use_container_width=True)
     
     st.stop()
 

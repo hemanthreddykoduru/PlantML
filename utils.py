@@ -435,6 +435,27 @@ from datetime import datetime
 # Path to the experimental data storage
 EXPERIMENTS_FILE = "experiments.json"
 
+def analyze_nlp_proof(notes: str) -> dict:
+    """Use VADER Sentiment to extract mathematical proof of crop success from qualitative text."""
+    from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+    analyzer = SentimentIntensityAnalyzer()
+    scores = analyzer.polarity_scores(notes)
+    compound = scores['compound']
+    
+    if compound >= 0.35:
+        outcome = "Success"
+    elif compound > -0.05:
+        outcome = "Partial Success"
+    else:
+        outcome = "Failure"
+        
+    return {
+        "score": compound,
+        "positivity": scores['pos'] * 100,
+        "negativity": scores['neg'] * 100,
+        "outcome": outcome
+    }
+
 def load_experiments() -> list:
     """Read all logged experiments from the local JSON database."""
     import os
@@ -446,8 +467,8 @@ def load_experiments() -> list:
     except Exception:
         return []
 
-def save_experiment(plant_name: str, soil_type: str, treatment: str, duration_days: int, outcome: str, notes: str) -> None:
-    """Append a new experiment log to the database."""
+def save_experiment(plant_name: str, soil_type: str, treatment: str, duration_days: int, outcome: str, notes: str, nlp_score: float = 0.0) -> None:
+    """Append a new experiment log to the database with its NLP score."""
     experiments = load_experiments()
     new_entry = {
         "id": str(uuid.uuid4())[:8],
@@ -458,6 +479,7 @@ def save_experiment(plant_name: str, soil_type: str, treatment: str, duration_da
         "duration_days": duration_days,
         "outcome": outcome,
         "notes": notes,
+        "nlp_score": nlp_score,
     }
     experiments.append(new_entry)
     with open(EXPERIMENTS_FILE, "w", encoding="utf-8") as f:
