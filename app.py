@@ -319,8 +319,8 @@ elif page == "📊 Validation Dashboard":
     
     colA, colB = st.columns(2)
     with colA:
-        # Bar chart of outcomes
-        fig1 = px.histogram(df, x='outcome', title='Experimental Outcomes', 
+        # Pie chart of outcomes
+        fig1 = px.pie(df, names='outcome', title='Experimental Outcomes', 
                      color='outcome', color_discrete_map={'Success':'#27a85a', 'Partial Success':'#f0a500', 'Failure':'#e05252', 'Ongoing':'#58a6ff'})
         fig1.update_layout(plot_bgcolor='#0d1117', paper_bgcolor='#0d1117', font_color='#e6edf3')
         st.plotly_chart(fig1, use_container_width=True)
