@@ -326,10 +326,11 @@ elif page == "📊 Validation Dashboard":
         st.plotly_chart(fig1, use_container_width=True)
         
     with colB:
-        # Bar chart of treatments per plant
-        fig2 = px.histogram(df, x='plant_name', color='outcome', title='Validations by Plant Target', barmode='group',
+        # Grouped thick bar chart of treatments per plant
+        df_counts = df.groupby(['plant_name', 'outcome']).size().reset_index(name='count')
+        fig2 = px.bar(df_counts, x='plant_name', y='count', color='outcome', title='Validations by Plant Target', barmode='group',
                            color_discrete_map={'Success':'#27a85a', 'Partial Success':'#f0a500', 'Failure':'#e05252'})
-        fig2.update_layout(plot_bgcolor='#0d1117', paper_bgcolor='#0d1117', font_color='#e6edf3')
+        fig2.update_layout(plot_bgcolor='#0d1117', paper_bgcolor='#0d1117', font_color='#e6edf3', bargap=0.15, bargroupgap=0.05)
         st.plotly_chart(fig2, use_container_width=True)
         
     st.markdown('<div class="section-heading">NLP-Validated Raw Logs</div>', unsafe_allow_html=True)
